@@ -1,8 +1,25 @@
 import React from 'react'
+import { useStateValue } from '../../Context/stateProvider'
 import './styles/product.css'
 
-function Product({ title, image, price, rating }) {
-  return (
+function Product({ id, title, image, price, rating }) {
+  
+    // eslint-disable-next-line no-unused-vars
+    const[{ basket }, dispatch] = useStateValue()
+    const addToCart = () => {
+        dispatch({
+            type: 'ADD_TO_CART',
+            item: {
+                id: id,
+                title: title,
+                image: image,
+                price: price,
+                rating: rating
+            }
+        })
+    }
+
+    return (
     <div className='product'>
         <img src={image} alt='product_image' />
         <div className='product__info'>
@@ -17,7 +34,7 @@ function Product({ title, image, price, rating }) {
                 {Array(rating).fill().map((_, i) => (<p>⭐️</p>))}
             </div>
         </div>
-        <button className='product__btn'>Add to Cart</button>
+        <button className='product__btn' onClick={addToCart}>Add to Cart</button>
     </div>
   )
 }
