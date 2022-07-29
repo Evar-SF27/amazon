@@ -5,9 +5,18 @@ import SearchIcon from '@mui/icons-material/Search'
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined'
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket'
 import { useStateValue } from '../../Context/stateProvider'
+import { auth } from '../../lib/firebase'
+import { signOut } from 'firebase/auth'
 
 function Header() {
-  const[{ basket }] = useStateValue()
+  const[{ basket, user }] = useStateValue()
+
+  const handleAuthentication = () => {
+    if (user) {
+      signOut(auth)
+    }
+  }
+
   return (
     <div className='header'>
       <Link to='/'>
@@ -30,10 +39,16 @@ function Header() {
         <SearchIcon className='header__searchIcon' />
       </div>
       <div className='header__nav'>
-        <div className='header__option'>
-          <span className='header__optionLineOne'>Hello Guest</span>
-          <span className='header__optionLineTwo'>Sign In</span>
-        </div>
+        <Link to={!user && '/login'}>
+          <div onClick={handleAuthentication} className='header__option'>
+            <span className='header__optionLineOne'>
+              Hello Guest
+            </span>
+            <span className='header__optionLineTwo'>
+              {user ? 'Sign Out' : 'Sign In'}
+            </span>
+          </div>
+        </Link>
         <div className='header__option'>
           <span className='header__optionLineOne'>Returns</span>
           <span className='header__optionLineTwo'>& Orders</span>
